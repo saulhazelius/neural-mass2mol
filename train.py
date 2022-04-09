@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[ ]:
-
-
 import random
 import math
 import matplotlib.pyplot as plt
@@ -15,21 +11,7 @@ import torch.optim as optim
 import time
 import numpy as np
 
-
-# In[ ]:
-
-
 device = 'cuda' if torch.cuda.is_available() == True else 'cpu'
-
-
-# In[ ]:
-
-
-device
-
-
-# In[ ]:
-
 
 def new_data2(file, lines):
 
@@ -89,28 +71,13 @@ def new_data2(file, lines):
     )
 
 
-# In[ ]:
-
-
 f = "path_to_file"
 num_lines = sum(1 for line in open(f))
 num_lines
 
-
-# In[ ]:
-
-
 x, x2, x3, x4, y, dic, ind2w = new_data2(f, num_lines)
 
-
-# In[ ]:
-
-
 x = np.delete(x, 0)
-
-
-# In[ ]:
-
 
 # REMOVE OUTLIER; MOLECULES WITH MASS WEIGHT > 300
 maxw = 300
@@ -124,9 +91,6 @@ for wei in reversed(x2):
         x2 = np.delete(x2, idx)
         x3 = np.delete(x3, idx, axis=0)
         x4 = np.delete(x4, idx)
-
-
-# In[ ]:
 
 
 lens = {}
@@ -145,9 +109,6 @@ plt.bar(lens.keys(), lens.values())
 print("max len", ml)
 
 
-# In[ ]:
-
-
 (
     X_train1,
     X_val1,
@@ -162,9 +123,6 @@ print("max len", ml)
 ) = train_test_split(
     x, x2, x3, x4, y, test_size=0.1, random_state=42, shuffle=True
 )  #
-
-
-# In[ ]:
 
 
 # Encoder as Set transformer classes based from juho lee https://arxiv.org/pdf/1810.00825.pdf
@@ -281,16 +239,9 @@ class DecoderRNN(nn.Module):
         return outputs, hidden, cell
     
 
-
-# In[ ]:
-
-
 tf = 0.75
 VOC = len(ind2w)
 VOC, ind2w
-
-
-# In[ ]:
 
 
 def tensor_from_smiles(smiles_b):
@@ -302,9 +253,6 @@ def tensor_from_smiles(smiles_b):
     return in_smiles
 
 
-# In[ ]:
-
-
 def get_layers(N, HID_DIM, hidden_st):
     # for creating inputs to the LSTM with n layer:
     temp = torch.randn(N, 1, HID_DIM).to(device)
@@ -313,9 +261,6 @@ def get_layers(N, HID_DIM, hidden_st):
     hidden1 = temp
 
     return hidden1
-
-
-# In[ ]:
 
 
 def evaluate(encoder1, decoder, x, x2, x3, x4, smi, LAY, HID):
@@ -450,20 +395,10 @@ def evaluateTodo(encoder1, decoder, ppair, LAY, HID):
         print("real:", smi)
     
 
-
-# In[ ]:
-
-
 criterion = nn.NLLLoss()
 
 
-# In[ ]:
-
-
 N_EPOCHS = 200
-
-
-# In[ ]:
 
 
 def model_function():
@@ -600,10 +535,6 @@ def model_function():
             print("test eval: ")
             evaluateTodo(encoder1, decoder, test_pairs, LAY, HID)
             
-
-
-# In[ ]:
-
 
 model_function()
 
